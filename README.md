@@ -37,62 +37,64 @@ The system analyzes financial documents like Tesla's Q2 2025 financial update.
 - Risk assessment
 - Market insights
 
-# Debugging Summary – What Was Fixed
+## Debugging Summary – What Was Fixed
 The original project intentionally contained multiple bugs and inefficient prompt designs.
 Below is a structured summary of all issues identified and resolved.
 
-# 1. Dependency Conflicts
-## Issues:
+### 1. Dependency Conflicts
+**Issues:**
 1. crewai required newer pydantic
 2. crewai-tools required newer click
 3. Version conflicts in opentelemetry
 4. Incompatible onnxruntime
 
-## Fix:
+**Fix:**
 1. Cleaned requirements file
 2. Removed strict conflicting version pins
 3. Installed compatible versions
 4. Used Python 3.10 virtual environment
 
-# 2. Incorrect CrewAI Imports
-# Issue:
+### 2. Incorrect CrewAI Imports
+**Issue:**
+```sh 
 from crewai.agents import Agent
+```
 Import error in latest CrewAI.
 
-## Fix:
+**Fix:**
 Updated to:
-from crewai import Agent
+```sh from crewai import Agent```
 
-# 3. Invalid Tool Implementation
-## Issue:
+### 3. Invalid Tool Implementation
+**Issue:**
 1. Custom tools were plain functions.
 2. CrewAI requires BaseTool instances.
 
-# Fix:
+**Fix:**
 Reimplemented tools properly using CrewAI-compatible structure.
 
-# 4. Missing python-multipart
-## Issue:
+### 4. Missing python-multipart
+**Issue:**
 File upload failed:
 RuntimeError: Form data requires "python-multipart"
 
-## Fix:
-pip install python-multipart
+**Fix:**
+```sh pip install python-multipart```
 
-# 5. Name Collision Bug
-## Issue:
+### 5. Name Collision Bug
+**Issue:**
 Endpoint function name conflicted with Task name:
 async def analyze_financial_document()
 
-## Fix:
+**Fix:**
 Renamed endpoint function to prevent shadowing.
 
-# 6. Token Overflow Error
-## Issue:
+### 6. Token Overflow Error
+**Issue:**
 1. Large PDFs exceeded model context:
 - Maximum context length exceeded
 
-## Fix:
+**Fix:**
 Implemented safe truncation:
 if len(document_content) > 12000:
     document_content = document_content[:12000]
