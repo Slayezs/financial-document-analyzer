@@ -62,8 +62,9 @@ from crewai.agents import Agent
 Import error in latest CrewAI.
 
 **Fix:**
-Updated to:
-```sh from crewai import Agent```
+```sh 
+from crewai import Agent
+```
 
 ### 3. Invalid Tool Implementation
 **Issue:**
@@ -79,7 +80,9 @@ File upload failed:
 RuntimeError: Form data requires "python-multipart"
 
 **Fix:**
-```sh pip install python-multipart```
+```sh 
+pip install python-multipart
+```
 
 ### 5. Name Collision Bug
 **Issue:**
@@ -96,71 +99,73 @@ Renamed endpoint function to prevent shadowing.
 
 **Fix:**
 Implemented safe truncation:
-if len(document_content) > 12000:
+```sh if len(document_content) > 12000:
     document_content = document_content[:12000]
+```
 
-# 7. Inefficient & Hallucination-Prone Prompts
-## Issues:
+### 7. Inefficient & Hallucination-Prone Prompts
+**Issues:**
 Original Behavior:
 1. Encouraged making up financial data
 2. Suggested fake URLs
 3. Recommended random investments
 4. Allowed hallucinations
 
-## Fix:
+**Fix:**
 Rewrote prompts to:
 1. Extract factual metrics
 2. Provide structured JSON output
 3. Prohibit fabrication
 4. Base analysis strictly on document data
 
-# Architecture Improvements
-## Original Architecture
+### Architecture Improvements
+**Original Architecture**
 1. Agent read file via tool during execution
 2. File not found errors
 3. High token usage
 4. Unstructured output
 
-## Improved Architecture
+**Improved Architecture**
 1. FastAPI saves uploaded file
 2. PDF text extracted immediately
 3. Content truncated for token safety
 4. Content passed to Crew as {document_content}
 5. Agent produces structured JSON output
 
-## Result:
+**Result:**
 1. Deterministic behavior
 2. Lower error rate
 3. Cleaner execution
 4. Reduced hallucination risk
 
-# API Endpoints
-## Health Check
-</code>
+### API Endpoints
+**Health Check**
+```sh
     GET /
-
-# Response:
-</Json>
+```
+**Response:**
+```sh
 {
   "message": "Financial Document Analyzer API is running"
 }
-
-## Analyze Financial Document
-</code>
+```
+**Analyze Financial Document**
+```sh
 POST /analyze
-
-## Form Data
+```
+**Form Data**
 1. file: PDF document
 2. query: Optional query
 
-# Example cURL
+**Example cURL**
+```sh 
 curl -X POST \
   http://127.0.0.1:8000/analyze \
   -H "Content-Type: multipart/form-data" \
   -F "file=@TSLA-Q2-2025-Update.pdf" \
   -F "query=Analyze this financial document for investment insights"
-
-# Final Working Features
+```
+### Final Working Features###
 1. Upload financial PDFs
 2. Extract key financial metrics
 3. Structured JSON output
