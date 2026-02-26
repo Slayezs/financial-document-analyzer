@@ -1,4 +1,4 @@
-from fastapi import FastAPI, File, UploadFile, Form, HTTPException
+from fastapi import FastAPI, File, UploadFile, Form, HTTPException,Depends
 import os
 import uuid
 
@@ -7,8 +7,12 @@ from pypdf import PdfReader
 
 from agents import financial_analyst
 from task import analyze_financial_document as financial_task
+from sqlalchemy.orm import Session
+from database import SessionLocal, engine, Base
+from models import FinancialAnalysis
 
 app = FastAPI(title="Financial Document Analyzer")
+Base.metadata.create_all(bind=engine)
 
 
 # ==========================================
@@ -62,6 +66,17 @@ def run_crew(query: str, file_path: str):
 
     return result
 
+# ==========================================
+# DATABASE
+# ==========================================
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
 
 # ==========================================
 # ROUTES
@@ -75,7 +90,8 @@ async def root():
 @app.post("/analyze")
 async def analyze_document(
     file: UploadFile = File(...),
-    query: str = Form(default="Analyze this financial document for investment insights")
+    query: str = Form(default="Analyze this financial document for investment insights"),
+    db: Session = Depends(get_db)
 ):
 
     file_id = str(uuid.uuid4())
@@ -96,6 +112,15 @@ async def analyze_document(
             query=query.strip(),
             file_path=file_path
         )
+        analysis_record = FinancialAnalysis(
+            file_name=file.filename,
+            query=query,
+            analysis_result=str(response)
+        )
+
+        db.add(analysis_record)
+        db.commit()
+        db.refresh(analysis_record)
 
         return {
             "status": "success",
@@ -117,6 +142,22 @@ async def analyze_document(
                 os.remove(file_path)
             except:
                 pass
+
+
+@app.get("/history")
+def get_analysis_history(db: Session = Depends(get_db)):
+    records = db.query(FinancialAnalysis).all()
+
+    return [
+        {
+            "id": record.id,
+            "file_name": record.file_name,
+            "query": record.query,
+            "analysis_result": record.analysis_result,
+            "created_at": record.created_at
+        }
+        for record in records
+    ]
 
 
 if __name__ == "__main__":

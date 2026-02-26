@@ -99,7 +99,8 @@ Renamed endpoint function to prevent shadowing.
 
 **Fix:**
 Implemented safe truncation:
-```sh if len(document_content) > 12000:
+```sh 
+if len(document_content) > 12000:
     document_content = document_content[:12000]
 ```
 
@@ -173,3 +174,16 @@ curl -X POST \
 5. Token-safe execution
 6. Stable dependency management
 7. Clean prompt engineering
+
+## Bonus Feature – Database Integration
+
+Implemented SQLite database using SQLAlchemy to persist financial analysis results.
+
+Features added:
+- FinancialAnalysis table
+- Automatic table creation on startup
+- /history endpoint to retrieve past analyses
+- Timestamped records
+- Persistent storage using SQLite
+
+Database file: financial_analysis.db
