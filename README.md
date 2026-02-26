@@ -152,6 +152,12 @@ Interactive API documentation (Swagger UI) is available at:
 ```sh
 http://127.0.0.1:8000/docs
 ```
+**Using the /docs interface, you can:**
+1. Upload financial PDF documents
+2. Submit custom financial analysis queries
+3. Test API responses interactively
+4. Retrieve stored analysis results via the /history endpoint
+
 ### API Endpoints
 **Health Check**
 ```sh
