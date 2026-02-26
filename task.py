@@ -1,5 +1,3 @@
-# task.py
-
 from crewai import Task
 from agents import financial_analyst
 

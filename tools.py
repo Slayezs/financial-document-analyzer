@@ -1,5 +1,3 @@
-# tools.py
-
 import os
 from dotenv import load_dotenv
 from crewai.tools import BaseTool
@@ -64,8 +62,6 @@ class FinancialDocumentTool(BaseTool):
             else:
                 with open(file_path, "r", encoding="utf-8") as file:
                     content = file.read()
-
-                # Basic deterministic cleanup
                 content = content.strip()
                 content = "\n".join(line.strip() for line in content.splitlines())
 
@@ -95,7 +91,6 @@ class InvestmentTool(BaseTool):
     args_schema: Type[BaseModel] = InvestmentInput
 
     def _run(self, financial_document_data: str) -> str:
-        # Placeholder deterministic response
         return "Investment analysis module to be implemented."
 
 
@@ -119,5 +114,4 @@ class RiskTool(BaseTool):
     args_schema: Type[BaseModel] = RiskInput
 
     def _run(self, financial_document_data: str) -> str:
-        # Placeholder deterministic response
         return "Risk assessment module to be implemented."

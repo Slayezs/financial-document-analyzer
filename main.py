@@ -43,8 +43,7 @@ def run_crew(query: str, file_path: str):
     # Extract PDF text
     document_content = extract_pdf_text(file_path)
 
-    # 🔥 Prevent token overflow
-    MAX_CHARS = 12000  # Safe limit for 16k token models
+    MAX_CHARS = 12000  
 
     if len(document_content) > MAX_CHARS:
         document_content = (
@@ -99,8 +98,6 @@ async def analyze_document(
 
     try:
         os.makedirs("data", exist_ok=True)
-
-        # Save uploaded file
         with open(file_path, "wb") as f:
             content = await file.read()
             f.write(content)
