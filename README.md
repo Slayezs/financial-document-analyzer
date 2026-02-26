@@ -139,6 +139,19 @@ Rewrote prompts to:
 3. Cleaner execution
 4. Reduced hallucination risk
 
+## API Documentation
+After starting the server:
+```sh
+uvicorn main:app --reload
+```
+The API will be available at:
+```sh
+http://127.0.0.1:8000
+```
+Interactive API documentation (Swagger UI) is available at:
+```sh
+http://127.0.0.1:8000/docs
+```
 ### API Endpoints
 **Health Check**
 ```sh
@@ -166,7 +179,30 @@ curl -X POST \
   -F "file=@TSLA-Q2-2025-Update.pdf" \
   -F "query=Analyze this financial document for investment insights"
 ```
-### Final Working Features###
+
+**Retrieve Analysis History**
+```sh
+GET /history
+```
+Returns all previously analyzed documents stored in the database.
+
+**Example cURL**
+```sh
+curl -X GET http://127.0.0.1:8000/history
+```
+**Sample Response**
+```sh
+[
+  {
+    "id": 1,
+    "file_name": "TSLA-Q2-2025-Update.pdf",
+    "query": "Analyze this financial document for investment insights",
+    "analysis_result": "{...}",
+    "created_at": "2026-02-26T11:05:35"
+  }
+]
+```
+### Final Working Features
 1. Upload financial PDFs
 2. Extract key financial metrics
 3. Structured JSON output
